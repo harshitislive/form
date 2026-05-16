@@ -1,0 +1,137 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <style>
+        * { 
+            margin: 0px; 
+            padding: 0px; 
+            box-sizing: border-box; 
+        }
+        body {
+            background-color: #032d58;
+            height: 100vh;
+            width: 100vw;
+            display: grid;
+            place-content: center;
+        }
+        div { 
+            background-color: #fff; 
+            padding: 20px; 
+            border-radius: 5px; 
+        }
+        form { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px; 
+        }
+        img { 
+            width: 100px; 
+            margin: auto; 
+            border: 1px solid black; 
+        }
+        form * { 
+            padding: 10px; 
+            border-radius: 5px; 
+            outline: none; 
+        }
+        button { 
+            background-color: #73b327; 
+            font-weight: 900; 
+            cursor: pointer; 
+            border: none; 
+        }
+        #msg { 
+            text-align: center; 
+            font-weight: bold; 
+            display: none; 
+        }
+        #msg.success { color: green; }
+        #msg.error { color: red; }
+    </style>
+</head>
+<body>
+    <div>
+        <form id="regForm">
+            <img src="image.png" alt="">
+            <h1>Registration Form</h1>
+            <input type="text"   name="fullname" id="fullname" placeholder="Full Name" required>
+            <input type="email"  name="email"    id="email"    placeholder="Email" required>
+            <input type="number" name="mobile"   id="mobile"   placeholder="Mobile Number" required>
+            <select name="college" id="college" required>
+                <option value="">Select College</option>
+                <option value="RNC">Rn College Hajipur</option>
+                <option value="LS">LS College Muzzaffarpur</option>
+                <option value="MDDM">MDDM College Muzzaffarpur</option>
+                <option value="LND">LND College Motihari</option>
+                <option value="SRKG">SRKG College Sitamarhi</option>
+            </select>
+            <select name="course" id="course" required>
+                <option value="">Select Course</option>
+                <option value="BCA">BCA</option>
+                <option value="BBA">BBA</option>
+            </select>
+            <select name="semester" id="semester" required>
+                <option value="">Select Semester</option>
+                <option value="1">1st Semester</option>
+                <option value="2">2nd Semester</option>
+                <option value="3">3rd Semester</option>
+                <option value="4">4th Semester</option>
+                <option value="5">5th Semester</option>
+                <option value="6">6th Semester</option>
+            </select>
+            <input type="text" name="feedback" id="feedback" placeholder="Feedback">
+            <button type="submit" id="submitBtn">Submit</button>
+            <p id="msg"></p>
+        </form>
+    </div>
+
+    <script>
+        // 🔴 Paste your deployed Apps Script Web App URL here
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyYGunkwQEutxpymW817QA9j3_3Xm8Nr14_E8FMzgSUpwCfqt3dDBQyFm1OFS8-kHkwMw/exec";
+
+        document.getElementById("regForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const btn = document.getElementById("submitBtn");
+            const msg = document.getElementById("msg");
+            btn.disabled = true;
+            btn.textContent = "Submitting...";
+            msg.style.display = "none";
+
+            const payload = {
+                fullname: document.getElementById("fullname").value,
+                email:    document.getElementById("email").value,
+                mobile:   document.getElementById("mobile").value,
+                college:  document.getElementById("college").value,
+                course:   document.getElementById("course").value,
+                semester: document.getElementById("semester").value,
+                feedback: document.getElementById("feedback").value
+            };
+
+            // ✅ Using no-cors avoids CORS errors with Apps Script
+            fetch(SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",          // Key to avoid CORS block
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                msg.textContent = "✅ Registered successfully!";
+                msg.className = "success";
+                msg.style.display = "block";
+                document.getElementById("regForm").reset();
+            })
+            .catch(() => {
+                msg.textContent = "❌ Submission failed. Try again.";
+                msg.className = "error";
+                msg.style.display = "block";
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.textContent = "Submit";
+            });
+        });
+    </script>
+</body>
+</html>
